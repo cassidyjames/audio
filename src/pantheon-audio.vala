@@ -15,40 +15,50 @@
 * Audio. If not, see http://www.gnu.org/licenses/.
 */
 
-int main (string[] args) {
-    Gtk.init (ref args);
+public class PantheonAudio : Gtk.Application {
+    public PantheonAudio () {
+        Object (application_id: "com.cassidyjames.audio",
+        flags: ApplicationFlags.FLAGS_NONE);
+    }
 
-    var window = new Gtk.Window ();
-    window.title = "audio-file.mp3";
-    window.set_border_width (12);
-    window.set_position (Gtk.WindowPosition.CENTER);
-    window.set_default_size (380, 292);
-    window.destroy.connect (Gtk.main_quit);
+    protected override void activate () {
+        var app_window = new Gtk.ApplicationWindow (this);
 
-    var layout = new Gtk.Grid ();
-    layout.column_spacing = 6;
-    layout.row_spacing = 6;
+        app_window.title = "audio-file.mp3";
+        app_window.set_border_width (12);
+        app_window.set_position (Gtk.WindowPosition.CENTER);
+        app_window.set_default_size (380, 292);
+        app_window.destroy.connect (Gtk.main_quit);
 
-    var seek_backward_button = new Gtk.Button ();
-    seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
+        var layout = new Gtk.Grid ();
+        layout.column_spacing = 6;
+        layout.row_spacing = 6;
 
-    var play_pause_button = new Gtk.Button ();
-    play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+        var seek_backward_button = new Gtk.Button ();
+        seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
 
-    var seek_forward_button = new Gtk.Button ();
-    seek_forward_button.image = new Gtk.Image.from_icon_name ("media-seek-forward-symbolic", Gtk.IconSize.DIALOG);
+        var play_pause_button = new Gtk.Button ();
+        play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
 
-    var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
-    seek_scale.set_draw_value (false);
+        var seek_forward_button = new Gtk.Button ();
+        seek_forward_button.image = new Gtk.Image.from_icon_name ("media-seek-forward-symbolic", Gtk.IconSize.DIALOG);
 
-    layout.attach (seek_backward_button, 0, 0, 1, 1);
-    layout.attach (play_pause_button, 1, 0, 1, 1);
-    layout.attach (seek_forward_button, 2, 0, 1, 1);
-    layout.attach (seek_scale, 0, 1, 3, 1);
+        var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        seek_scale.set_draw_value (false);
 
-    window.add (layout);
+        layout.attach (seek_backward_button, 0, 0, 1, 1);
+        layout.attach (play_pause_button, 1, 0, 1, 1);
+        layout.attach (seek_forward_button, 2, 0, 1, 1);
+        layout.attach (seek_scale, 0, 1, 3, 1);
 
-    window.show_all ();
-    Gtk.main ();
-    return 0;
+        app_window.add (layout);
+
+        app_window.show_all ();
+    }
+
+    public static int main (string[] args) {
+        var app = new PantheonAudio ();
+
+        return app.run (args);
+    }
 }
