@@ -22,6 +22,7 @@ public class PantheonAudio : Gtk.Application {
     }
 
     protected override void activate () {
+        var playing = false;
         var app_window = new Gtk.ApplicationWindow (this);
 
         /*app_window.title = "audio-file.mp3";*/
@@ -46,6 +47,15 @@ public class PantheonAudio : Gtk.Application {
 
         var play_pause_button = new Gtk.Button ();
         play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+        play_pause_button.clicked.connect (() => {
+            if (playing == true) {
+              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+              playing = false;
+            } else {
+              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
+              playing = true;
+            }
+        });
 
         var seek_forward_button = new Gtk.Button ();
         seek_forward_button.image = new Gtk.Image.from_icon_name ("media-seek-forward-symbolic", Gtk.IconSize.DIALOG);
