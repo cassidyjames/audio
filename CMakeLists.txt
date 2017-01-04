@@ -1,5 +1,5 @@
 # project name
-project (hello-again)
+project (pantheon-audio)
 
 # the oldest stable cmake version we support
 cmake_minimum_required (VERSION 2.6)
@@ -12,7 +12,7 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/src)
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
 # what to call that directory where we install data too
-set (PKGDATADIR "${DATADIR}/hello-again")
+set (PKGDATADIR "${DATADIR}/pantheon-audio")
 
 set (EXEC_NAME "pantheon-audio")
 set (RELEASE_NAME "A hello world.")
@@ -39,7 +39,7 @@ ensure_vala_version("0.16" MINIMUM)
 # files we want to compile
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
-    src/hello-again.vala
+    src/pantheon-audio.vala
 
 # tell what libraries to use when compiling
 PACKAGES
@@ -53,4 +53,4 @@ add_executable(${EXEC_NAME} ${VALA_C})
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
 # install our .desktop file so the Applications menu will see it
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/hello.desktop DESTINATION ${DATADIR}/applications/)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/pantheon-audio.desktop DESTINATION ${DATADIR}/applications/)
