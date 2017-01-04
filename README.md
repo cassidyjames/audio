@@ -1,8 +1,9 @@
 # Audio
 
 A personal pet project for now while I go through the [elementary Developer 
-Docs](https://elementary.io/docs/code/getting-started). Maybe eventually it will
-look a little something like this:
+Docs](https://elementary.io/docs/code/getting-started). 
+
+## Mockup
 
 ```
 |------------------------|
@@ -13,3 +14,7 @@ look a little something like this:
 |   ----o-------------   |
 |------------------------|
 ```
+
+## Currently:
+
+![Screenshot](http://i.imgur.com/foJCVS5.png)
