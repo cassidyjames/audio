@@ -24,11 +24,18 @@ public class PantheonAudio : Gtk.Application {
     protected override void activate () {
         var app_window = new Gtk.ApplicationWindow (this);
 
-        app_window.title = "audio-file.mp3";
+        /*app_window.title = "audio-file.mp3";*/
         app_window.set_border_width (12);
         app_window.set_position (Gtk.WindowPosition.CENTER);
         app_window.set_default_size (380, 292);
-        app_window.destroy.connect (Gtk.main_quit);
+        app_window.set_resizable (false);
+
+        // setup header bar
+        var header_bar = new Gtk.HeaderBar ();
+        header_bar.show_close_button = true;
+        header_bar.title = _("audio-file.mp3");
+
+        app_window.set_titlebar (header_bar);
 
         var layout = new Gtk.Grid ();
         layout.column_spacing = 6;
@@ -54,6 +61,7 @@ public class PantheonAudio : Gtk.Application {
         app_window.add (layout);
 
         app_window.show_all ();
+        app_window.destroy.connect (Gtk.main_quit);
     }
 
     public static int main (string[] args) {
