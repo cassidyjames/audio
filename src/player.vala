@@ -30,7 +30,7 @@ public class Player {
     }
 
     public Player () {
-		playbin = ElementFactory.make ("playbin", "play");
+	    playbin = ElementFactory.make ("playbin", "play");
     }
 
     public void set_uri (string uri) {
@@ -44,6 +44,24 @@ public class Player {
     public void pause () {
         playbin.set_state (State.PAUSED);
     }
+
+    public void set_position (double pos) {
+        // Determine the overall duration
+        int64 duration;
+        playbin.query_duration (Gst.Format.TIME, out duration);
+        int64 new_pos = (int64)(duration * pos);
+        playbin.seek_simple (Gst.Format.TIME, Gst.SeekFlags.SKIP, new_pos);
+    }
+    
+    public double get_position () {
+        int64 current_position;
+        playbin.query_position (Gst.Format.TIME, out current_position);
+        int64 duration;
+        playbin.query_duration (Gst.Format.TIME, out duration);
+        double position_percentage = current_position / duration;
+        return position_percentage;
+    }
+    
 }
 
 	
