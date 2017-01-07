@@ -24,6 +24,7 @@ public class PantheonAudio : Gtk.Application {
     protected override void activate () {
         var playing = false;
         var app_window = new Gtk.ApplicationWindow (this);
+        var player = Player.get_default ();
 
         /*app_window.title = "audio-file.mp3";*/
         app_window.set_border_width (12);
@@ -48,12 +49,14 @@ public class PantheonAudio : Gtk.Application {
         var play_pause_button = new Gtk.Button ();
         play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
         play_pause_button.clicked.connect (() => {
-            if (playing == true) {
-              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-              playing = false;
-            } else {
-              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
-              playing = true;
+			if (playing == true) {
+				player.pause ();
+				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+				playing = false;
+			} else {
+				player.play ();
+				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
+				playing = true;
             }
         });
 
@@ -76,6 +79,7 @@ public class PantheonAudio : Gtk.Application {
 
     public static int main (string[] args) {
         var app = new PantheonAudio ();
+        Gst.init (ref args);
 
         return app.run (args);
     }
