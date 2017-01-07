@@ -28,7 +28,7 @@ public class PantheonAudio : Gtk.Application {
         
         // This hardcoded URI is for testing purposes only
         player.set_uri ("http://ec-media.sndcdn.com/y8DTb0AzZzgu?f10880d39085a94a0418a7ef61b03d5275edf83695e0cd6a5a31b701e3b17b5e8126718fbde1c872d1c0a6ac83ef4ee79c57f4de24fae85839aa5ad736");
-
+        
         /*app_window.title = "audio-file.mp3";*/
         app_window.set_border_width (12);
         app_window.set_position (Gtk.WindowPosition.CENTER);
@@ -78,6 +78,12 @@ public class PantheonAudio : Gtk.Application {
             player.set_position (current_position + 0.1);
         });
 
+        // When stream ends, set the play_pause_button back to play
+        player.stream_ended.connect (() => {
+            play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+			playing = false;
+        });
+        
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
         seek_scale.set_draw_value (false);
 
@@ -91,6 +97,7 @@ public class PantheonAudio : Gtk.Application {
         app_window.show_all ();
         app_window.destroy.connect (Gtk.main_quit);
     }
+    
 
     public static int main (string[] args) {
         var app = new PantheonAudio ();

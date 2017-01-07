@@ -19,6 +19,8 @@ using Gst;
 
 public class Player {
 
+    public signal void stream_ended ();
+
 	private static Player? player = null;
 	private dynamic Element playbin;
 
@@ -31,6 +33,8 @@ public class Player {
 
     public Player () {
 	    playbin = ElementFactory.make ("playbin", "play");
+	    Gst.Bus bus = playbin.get_bus ();
+        bus.add_watch (0, bus_callback);
     }
 
     public void set_uri (string uri) {
@@ -60,6 +64,24 @@ public class Player {
         playbin.query_duration (Gst.Format.TIME, out duration);
         double position_percentage = current_position / duration;
         return position_percentage;
+    }
+    
+    private bool bus_callback (Gst.Bus bus, Gst.Message message) {
+        switch (message.type) {
+        case MessageType.ERROR:
+            GLib.Error err;
+            string debug;
+            message.parse_error (out err, out debug);
+            warning (err.message);
+            break;
+        case MessageType.EOS:
+            stream_ended ();
+            break;
+        default:
+            break;
+        }
+
+        return true;
     }
     
 }
