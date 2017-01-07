@@ -62,7 +62,7 @@ public class Player {
         playbin.query_position (Gst.Format.TIME, out current_position);
         int64 duration;
         playbin.query_duration (Gst.Format.TIME, out duration);
-        double position_percentage = current_position / duration;
+        double position_percentage = (double)current_position / (double)duration;
         return position_percentage;
     }
     

@@ -27,7 +27,7 @@ public class PantheonAudio : Gtk.Application {
         var player = Player.get_default ();
         
         // This hardcoded URI is for testing purposes only
-        player.set_uri ("http://ec-media.sndcdn.com/y8DTb0AzZzgu?f10880d39085a94a0418a7ef61b03d5275edf83695e0cd6a5a31b701e3b17b5e8126718fbde1c872d1c0a6ac83ef4ee79c57f4de24fae85839aa5ad736");
+        player.set_uri ("https://ia800207.us.archive.org/29/items/MLKDream/MLKDream_64kb.mp3");
         
         /*app_window.title = "audio-file.mp3";*/
         app_window.set_border_width (12);
@@ -86,6 +86,20 @@ public class PantheonAudio : Gtk.Application {
         
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
         seek_scale.set_draw_value (false);
+        
+        // Update the seek_scale with the current time every half second
+        GLib.Timeout.add (500, () => {
+            if(playing) {
+                seek_scale.set_value (player.get_position () * 100);
+            }
+            return true;
+        });
+        
+        // When the scale changes, seek in the player
+        seek_scale.change_value.connect ((scroll, new_value) => {
+            player.set_position (new_value / 100);
+            return false;
+        });
 
         layout.attach (seek_backward_button, 0, 0, 1, 1);
         layout.attach (play_pause_button, 1, 0, 1, 1);
