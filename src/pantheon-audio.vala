@@ -24,7 +24,11 @@ public class PantheonAudio : Gtk.Application {
     protected override void activate () {
         var playing = false;
         var app_window = new Gtk.ApplicationWindow (this);
-
+        var player = Player.get_default ();
+        
+        // This hardcoded URI is for testing purposes only
+        player.set_uri ("https://ia800207.us.archive.org/29/items/MLKDream/MLKDream_64kb.mp3");
+        
         /*app_window.title = "audio-file.mp3";*/
         app_window.set_border_width (12);
         app_window.set_position (Gtk.WindowPosition.CENTER);
@@ -44,24 +48,58 @@ public class PantheonAudio : Gtk.Application {
 
         var seek_backward_button = new Gtk.Button ();
         seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
+        seek_backward_button.clicked.connect (() => {
+            double current_position = player.get_position ();
+            
+            // Seeks backward 10% of the length of the track
+            player.set_position (current_position - 0.1);
+        });
 
         var play_pause_button = new Gtk.Button ();
         play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
         play_pause_button.clicked.connect (() => {
-            if (playing == true) {
-              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-              playing = false;
-            } else {
-              play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
-              playing = true;
+			if (playing == true) {
+				player.pause ();
+				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+				playing = false;
+			} else {
+				player.play ();
+				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
+				playing = true;
             }
         });
 
         var seek_forward_button = new Gtk.Button ();
         seek_forward_button.image = new Gtk.Image.from_icon_name ("media-seek-forward-symbolic", Gtk.IconSize.DIALOG);
+        seek_forward_button.clicked.connect (() => {
+            double current_position = player.get_position ();
+            
+            // Seeks forward 10% of the length of the track
+            player.set_position (current_position + 0.1);
+        });
 
+        // When stream ends, set the play_pause_button back to play
+        player.stream_ended.connect (() => {
+            play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+			playing = false;
+        });
+        
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
         seek_scale.set_draw_value (false);
+        
+        // Update the seek_scale with the current time every half second
+        GLib.Timeout.add (500, () => {
+            if(playing) {
+                seek_scale.set_value (player.get_position () * 100);
+            }
+            return true;
+        });
+        
+        // When the scale changes, seek in the player
+        seek_scale.change_value.connect ((scroll, new_value) => {
+            player.set_position (new_value / 100);
+            return false;
+        });
 
         layout.attach (seek_backward_button, 0, 0, 1, 1);
         layout.attach (play_pause_button, 1, 0, 1, 1);
@@ -73,9 +111,11 @@ public class PantheonAudio : Gtk.Application {
         app_window.show_all ();
         app_window.destroy.connect (Gtk.main_quit);
     }
+    
 
     public static int main (string[] args) {
         var app = new PantheonAudio ();
+        Gst.init (ref args);
 
         return app.run (args);
     }

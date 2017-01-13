@@ -23,7 +23,7 @@ set (VERSION_INFO "whats up world")
 find_package(PkgConfig)
 
 # now let's actually check for the required dependencies
-pkg_check_modules(DEPS REQUIRED gtk+-3.0)
+pkg_check_modules(DEPS REQUIRED gtk+-3.0 gstreamer-1.0)
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -40,10 +40,15 @@ ensure_vala_version("0.16" MINIMUM)
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/pantheon-audio.vala
+    src/player.vala
 
 # tell what libraries to use when compiling
 PACKAGES
     gtk+-3.0
+    gstreamer-1.0
+    
+OPTIONS
+    ${GLOBAL_VALAC_OPTIONS}
 )
 
 # tell cmake what to call the executable we just made
