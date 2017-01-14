@@ -59,14 +59,14 @@ public class PantheonAudio : Gtk.Application {
         var play_pause_button = new Gtk.Button ();
         play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
         play_pause_button.clicked.connect (() => {
-			if (playing == true) {
-				player.pause ();
-				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-				playing = false;
-			} else {
-				player.play ();
-				play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
-				playing = true;
+            if (playing == true) {
+                player.pause ();
+                play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+                playing = false;
+            } else {
+                player.play ();
+                play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
+                playing = true;
             }
         });
 
@@ -82,7 +82,7 @@ public class PantheonAudio : Gtk.Application {
         // When stream ends, set the play_pause_button back to play
         player.stream_ended.connect (() => {
             play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-			playing = false;
+            playing = false;
         });
 
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);

@@ -21,8 +21,8 @@ public class Player {
 
     public signal void stream_ended ();
 
-	private static Player? player = null;
-	private dynamic Element playbin;
+    private static Player? player = null;
+    private dynamic Element playbin;
 
     public static Player? get_default () {
         if (player == null) {
@@ -32,8 +32,8 @@ public class Player {
     }
 
     public Player () {
-	    playbin = ElementFactory.make ("playbin", "play");
-	    Gst.Bus bus = playbin.get_bus ();
+        playbin = ElementFactory.make ("playbin", "play");
+        Gst.Bus bus = playbin.get_bus ();
         bus.add_watch (0, bus_callback);
     }
 
@@ -56,7 +56,7 @@ public class Player {
         int64 new_pos = (int64)(duration * pos);
         playbin.seek_simple (Gst.Format.TIME, Gst.SeekFlags.SKIP, new_pos);
     }
-    
+
     public double get_position () {
         int64 current_position;
         playbin.query_position (Gst.Format.TIME, out current_position);
@@ -65,7 +65,7 @@ public class Player {
         double position_percentage = (double)current_position / (double)duration;
         return position_percentage;
     }
-    
+
     private bool bus_callback (Gst.Bus bus, Gst.Message message) {
         switch (message.type) {
         case MessageType.ERROR:
@@ -83,7 +83,5 @@ public class Player {
 
         return true;
     }
-    
-}
 
-	
+}
