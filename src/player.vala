@@ -18,7 +18,6 @@
 using Gst;
 
 public class Player {
-
     public signal void stream_ended ();
 
     private static Player? player = null;
@@ -28,6 +27,7 @@ public class Player {
         if (player == null) {
             player = new Player();
         }
+
         return player;
     }
 
@@ -63,6 +63,7 @@ public class Player {
         int64 duration;
         playbin.query_duration (Gst.Format.TIME, out duration);
         double position_percentage = (double)current_position / (double)duration;
+
         return position_percentage;
     }
 

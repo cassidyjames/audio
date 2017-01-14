@@ -22,7 +22,7 @@ public class PantheonAudio : Gtk.Application {
     }
 
     protected override void activate () {
-        var playing = false;
+        bool playing = false;
         var app_window = new Gtk.ApplicationWindow (this);
         var player = Player.get_default ();
         string title = "audio-file.mp3";
@@ -93,12 +93,14 @@ public class PantheonAudio : Gtk.Application {
             if(playing) {
                 seek_scale.set_value (player.get_position () * 100);
             }
+
             return true;
         });
 
         // When the scale changes, seek in the player
         seek_scale.change_value.connect ((scroll, new_value) => {
             player.set_position (new_value / 100);
+
             return false;
         });
 
