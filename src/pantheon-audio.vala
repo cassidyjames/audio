@@ -30,18 +30,11 @@ public class PantheonAudio : Gtk.Application {
         // This hardcoded URI is for testing purposes only
         player.set_uri ("https://ia800207.us.archive.org/29/items/MLKDream/MLKDream_64kb.mp3");
 
-        /*app_window.title = "audio-file.mp3";*/
+        app_window.title = title;
         app_window.set_border_width (12);
         app_window.set_position (Gtk.WindowPosition.CENTER);
         app_window.set_default_size (380, 292);
         app_window.set_resizable (false);
-
-        // setup header bar
-        var header_bar = new Gtk.HeaderBar ();
-        header_bar.show_close_button = true;
-        header_bar.title = title;
-
-        app_window.set_titlebar (header_bar);
 
         var layout = new Gtk.Grid ();
         layout.column_spacing = 6;
