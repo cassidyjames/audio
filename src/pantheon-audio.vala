@@ -15,6 +15,9 @@
 * Audio. If not, see http://www.gnu.org/licenses/.
 */
 
+// Want ability to terminate imediately - i.e. don't open audio file
+extern void exit(int exit_code);
+
 public class PantheonAudio : Gtk.Application {
     public PantheonAudio () {
         Object (application_id: "com.cassidyjames.audio",
@@ -37,28 +40,6 @@ public class PantheonAudio : Gtk.Application {
         var layout = new Gtk.Grid ();
         layout.column_spacing = 6;
         layout.row_spacing = 6;
-
-        var load_button = new Gtk.Button ();
-        load_button.image = new Gtk.Image.from_icon_name ("folder-open", Gtk.IconSize.DIALOG);
-        load_button.clicked.connect(() => {
-            var file_chooser = new Gtk.FileChooserDialog ("Open File", this as Gtk.Window,
-                                      Gtk.FileChooserAction.OPEN,
-                                      "_Cancel", Gtk.ResponseType.CANCEL,
-                                      "_Open", Gtk.ResponseType.ACCEPT);
-
-            if (file_chooser.run () == Gtk.ResponseType.ACCEPT) {
-                // Stop playback, load new song
-                player.stop ();
-                play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-                playing = false;
-                player.set_uri (file_chooser.get_uri());
-                
-                var player_title = GLib.Path.get_basename (file_chooser.get_uri());
-                // Stupid, but need to replace escaped spacing
-                app_window.title = player_title.replace("%20", " ");
-            }
-            file_chooser.destroy (); 
-        });
 
         var seek_backward_button = new Gtk.Button ();
         seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
@@ -116,15 +97,49 @@ public class PantheonAudio : Gtk.Application {
             return false;
         });
 
+        var file_chooser = new Gtk.FileChooserDialog ("Open File", 
+                                      app_window,
+                                      Gtk.FileChooserAction.OPEN,
+                                      "_Cancel", Gtk.ResponseType.CANCEL,
+                                      "_Open", Gtk.ResponseType.ACCEPT);
+
+        // Filter audio
+		Gtk.FileFilter filter = new Gtk.FileFilter ();
+		file_chooser.set_filter (filter);
+		filter.add_mime_type ("audio/mpeg"); // mp3
+        filter.add_mime_type ("audio/vnd.wav"); // wav
+        filter.add_mime_type ("audio/ogg"); // ogg
+        filter.add_mime_type ("audio/mp4"); // mp4 m4a
+
+        file_chooser.response.connect ((dialog, response_id) => {
+            switch (response_id) {
+                case Gtk.ResponseType.ACCEPT:
+                    play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+                    playing = false;
+                    player.set_uri (file_chooser.get_uri());
+                    var player_title = GLib.Path.get_basename (file_chooser.get_uri());
+                    // Stupid, but need to replace escaped spacing
+                    app_window.title = player_title.replace("%20", " ");
+                    break;
+                default:
+                    exit (0);
+                    break;
+            }
+
+            dialog.destroy ();
+        });
+        
+
         layout.attach (seek_backward_button, 0, 0, 1, 1);
-        layout.attach (play_pause_button, 1, 0, 1, 1);
+        layout.attach (play_pause_button, 1, 0, 1, 1);  
         layout.attach (seek_forward_button, 2, 0, 1, 1);
-        layout.attach (load_button, 3, 0, 1, 1);
-        layout.attach (seek_scale, 0, 1, 4, 1);
+        layout.attach (seek_scale, 0, 1, 3, 1);
 
         app_window.add (layout);
 
         app_window.show_all ();
+        file_chooser.show ();
+       
         app_window.destroy.connect (Gtk.main_quit);
     }
 
