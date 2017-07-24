@@ -1,5 +1,5 @@
 # project name
-project (pantheon-audio)
+project (com.github.cassidyjames.audio)
 
 # the oldest stable cmake version we support
 cmake_minimum_required (VERSION 2.6)
@@ -12,12 +12,12 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/src)
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
 # what to call that directory where we install data too
-set (PKGDATADIR "${DATADIR}/pantheon-audio")
+set (PKGDATADIR "${DATADIR}/com.github.cassidyjames.audio")
 
-set (EXEC_NAME "pantheon-audio")
-set (RELEASE_NAME "A hello world.")
-set (VERSION "0.1")
-set (VERSION_INFO "whats up world")
+set (EXEC_NAME "com.github.cassidyjames.audio")
+set (RELEASE_NAME "Play files")
+set (VERSION "0.1.2")
+set (VERSION_INFO "Play files")
 
 # we're about to use pkgconfig to make sure dependencies are installed so let's find pkgconfig first
 find_package(PkgConfig)
@@ -39,14 +39,14 @@ ensure_vala_version("0.16" MINIMUM)
 # files we want to compile
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
-    src/pantheon-audio.vala
+    src/audio.vala
     src/player.vala
 
 # tell what libraries to use when compiling
 PACKAGES
     gtk+-3.0
     gstreamer-1.0
-    
+
 OPTIONS
     ${GLOBAL_VALAC_OPTIONS}
 )
@@ -58,7 +58,7 @@ add_executable(${EXEC_NAME} ${VALA_C})
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
 # install our .desktop file so the Applications menu will see it
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/pantheon-audio.desktop DESTINATION ${DATADIR}/applications/)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.cassidyjames.audio.desktop DESTINATION ${DATADIR}/applications/)
 
 # Translation files
 set (GETTEXT_PACKAGE "${CMAKE_PROJECT_NAME}")
