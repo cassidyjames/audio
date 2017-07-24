@@ -3,10 +3,10 @@ Name=Audio
 GenericName=Audio Player
 Comment=Listen to audio tracks on demand
 Categories=GTK;Utility;AudioVideo;Audio;Player;
-Exec=pantheon-audio
+Exec=com.github.cassidyjames.audio
 Icon=multimedia-audio-player
 Terminal=false
 Type=Application
-X-GNOME-Gettext-Domain=pantheon-audio
+X-GNOME-Gettext-Domain=com.github.cassidyjames.audio
 Keywords=Audio;Music;Noise;
 
