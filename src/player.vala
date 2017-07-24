@@ -49,6 +49,10 @@ public class Player {
         playbin.set_state (State.PAUSED);
     }
 
+    public void stop () {
+        playbin.set_state (State.NULL);
+    }
+
     public void set_position (double pos) {
         // Determine the overall duration
         int64 duration;
