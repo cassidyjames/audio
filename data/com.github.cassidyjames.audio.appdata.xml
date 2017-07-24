@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 Cassidy James Blaede <c@ssidyjam.es> -->
+<component type="desktop">
+  <id>com.github.cassidyjames.audio.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Audio</name>
+  <summary>Play audio tracks</summary>
+  <description>
+    <p>Simply play audio tracks and files. That's it. Not a music player, podcast player, audiobook player; just a simple utility to play back the odd MP3 or whatever.</p>
+  </description>
+  <provides>
+    <binary>com.github.cassidyjames.audio</binary>
+  </provides>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/cassidyjames/audio/master/data/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>Cassidy James Blaede</developer_name>
+  <url type="homepage">http://cassidyjames.com</url>
+  <url type="bugtracker">https://github.com/cassidyjames/audio/issues</url>
+  <custom>
+    <value key="x-appcenter-color-primary">#a62100</value>
+    <value key="x-appcenter-color-primary-text">#ffc27d</value>
+    <value key="x-appcenter-suggested-price">0</value>
+  </custom>
+</component>
