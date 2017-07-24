@@ -20,7 +20,7 @@ extern void exit(int exit_code);
 
 public class PantheonAudio : Gtk.Application {
     public PantheonAudio () {
-        Object (application_id: "com.cassidyjames.audio",
+        Object (application_id: "com.github.cassidyjames.audio",
         flags: ApplicationFlags.FLAGS_NONE);
     }
 
