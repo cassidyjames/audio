@@ -4,13 +4,13 @@ com.github.cassidyjames.audio (0.1.3) trusty; urgency=low
 
  -- Cassidy James Blaede <cassidy@elementary.io>  Mon, 24 Jul 2017 16:48:00 -0600
 
- com.github.cassidyjames.audio (0.1.1) trusty; urgency=low
+ com.github.cassidyjames.audio (0.1.2) trusty; urgency=low
 
    * Play files
 
   -- Cassidy James Blaede <cassidy@elementary.io>  Mon, 24 Jul 2017 16:26:00 -0600
 
-com.github.cassidyjames.audio (0.1) trusty; urgency=low
+com.github.cassidyjames.audio (0.0.1) trusty; urgency=low
 
   * Initial Release.
 
