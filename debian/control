@@ -1,4 +1,4 @@
-Source: pantheon-audio
+Source: com.github.cassidyjames.audio
 Section: x11
 Priority: extra
 Maintainer: Cassidy James Blaede <cassidy@elementary.io>
@@ -8,7 +8,7 @@ Build-Depends: cmake (>= 2.8),
                valac-0.26 | valac (>= 0.26)
 Standards-Version: 3.9.3
 
-Package: pantheon-audio
+Package: com.github.cassidyjames.audio
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Audio Player
