@@ -118,8 +118,11 @@ public class PantheonAudio : Gtk.Application {
                     playing = false;
                     player.set_uri (file_chooser.get_uri());
                     var player_title = GLib.Path.get_basename (file_chooser.get_uri());
-                    // Stupid, but need to replace escaped spacing
-                    app_window.title = player_title.replace("%20", " ");
+                    // Remove extension, replace spaces with actual spaces
+                    // In future might read mp3 meta if need more info - i.e. time
+                    var ext_index = player_title.last_index_of_char ('.', 0);
+                    if (ext_index == -1) ext_index = player_title.length;
+                    app_window.title = player_title.substring (0, ext_index).replace ("%20", " ");
                     break;
                 default:
                     exit (0);
