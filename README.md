@@ -1,7 +1,6 @@
 # Audio
 
-A personal pet project for now while I go through the [elementary Developer 
-Docs](https://elementary.io/docs/code/getting-started). 
+Play audio files. That's it.
 
 ## Mockup
 
