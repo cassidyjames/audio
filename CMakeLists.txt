@@ -15,9 +15,9 @@ set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/com.github.cassidyjames.audio")
 
 set (EXEC_NAME "com.github.cassidyjames.audio")
-set (RELEASE_NAME "Play files")
-set (VERSION "0.1.2")
-set (VERSION_INFO "Play files")
+set (RELEASE_NAME "AppData")
+set (VERSION "0.1.3")
+set (VERSION_INFO "Add appdata")
 
 # we're about to use pkgconfig to make sure dependencies are installed so let's find pkgconfig first
 find_package(PkgConfig)
