@@ -96,7 +96,7 @@ public class PantheonAudio : Gtk.Application {
         var layout = new Gtk.Grid ();
         layout.column_spacing = 6;
         layout.row_spacing = 6;
-        
+
         var seek_backward_button = new Gtk.Button ();
         seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
         seek_backward_button.clicked.connect (() => {
