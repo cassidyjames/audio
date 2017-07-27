@@ -21,17 +21,73 @@ extern void exit(int exit_code);
 public class PantheonAudio : Gtk.Application {
     public PantheonAudio () {
         Object (application_id: "com.github.cassidyjames.audio",
-        flags: ApplicationFlags.FLAGS_NONE);
+        flags: ApplicationFlags.HANDLES_OPEN); // handle argument
+    }
+
+    /* Fix title from file_uri, set uri for the player and play the file */
+    private void play_file (Gtk.ApplicationWindow app_window, Player player, string file_uri) {
+        var title = GLib.Path.get_basename (file_uri);
+        // Remove extension, replace spaces with actual spaces
+        // In future might read mp3 meta if need more info - i.e. time
+        var ext_index = title.last_index_of_char ('.', 0);
+        if (ext_index == -1) ext_index = title.length;
+        app_window.title = title.substring (0, ext_index).replace ("%20", " ");
+
+        player.set_uri (file_uri);
+        player.play();
+    }
+
+    // Asked to open file
+    protected override void open (File[] files, string hint) {
+        // Take first file passed as argument, no dialog
+        launch_app (files[0].get_uri (), false);
     }
 
     protected override void activate () {
-        bool playing = false;
+        // No file passed, launch dialog
+        launch_app ("", true);
+    }
+
+    void launch_app (string file_uri, bool show_dialog) 
+    {
+        bool playing = true;
         var app_window = new Gtk.ApplicationWindow (this);
         var player = Player.get_default ();
-        string title = "Audio";
         var play_pause_button = new Gtk.Button ();
 
-        app_window.title = title;
+        if (show_dialog)
+        {
+            var file_chooser = new Gtk.FileChooserDialog ("Open File", 
+                                        app_window,
+                                        Gtk.FileChooserAction.OPEN,
+                                        "_Cancel", Gtk.ResponseType.CANCEL,
+                                        "_Open", Gtk.ResponseType.ACCEPT);
+
+            // Filter audio
+            Gtk.FileFilter filter = new Gtk.FileFilter ();
+            file_chooser.set_filter (filter);
+            filter.add_mime_type ("audio/mpeg"); // mp3
+            filter.add_mime_type ("audio/vnd.wav"); // wav
+            filter.add_mime_type ("audio/ogg"); // ogg
+            filter.add_mime_type ("audio/mp4"); // mp4 m4a
+
+            file_chooser.response.connect ((dialog, response_id) => {
+                switch (response_id) {
+                    case Gtk.ResponseType.ACCEPT:
+                        play_file (app_window, player, file_chooser.get_uri ());
+                        break;
+                    default:
+                        exit (0);
+                        break;
+                }
+
+                dialog.destroy ();
+            });
+            file_chooser.show ();
+        } else {
+            play_file (app_window, player, file_uri);
+        }
+
         app_window.set_border_width (12);
         app_window.set_position (Gtk.WindowPosition.CENTER);
         app_window.set_default_size (380, 292);
@@ -50,7 +106,8 @@ public class PantheonAudio : Gtk.Application {
             player.set_position (current_position - 0.1);
         });
 
-        play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
+        // Default is to play audio
+        play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.DIALOG);
         play_pause_button.clicked.connect (() => {
             if (playing == true) {
                 player.pause ();
@@ -97,42 +154,6 @@ public class PantheonAudio : Gtk.Application {
             return false;
         });
 
-        var file_chooser = new Gtk.FileChooserDialog ("Open File", 
-                                      app_window,
-                                      Gtk.FileChooserAction.OPEN,
-                                      "_Cancel", Gtk.ResponseType.CANCEL,
-                                      "_Open", Gtk.ResponseType.ACCEPT);
-
-        // Filter audio
-		Gtk.FileFilter filter = new Gtk.FileFilter ();
-		file_chooser.set_filter (filter);
-		filter.add_mime_type ("audio/mpeg"); // mp3
-        filter.add_mime_type ("audio/vnd.wav"); // wav
-        filter.add_mime_type ("audio/ogg"); // ogg
-        filter.add_mime_type ("audio/mp4"); // mp4 m4a
-
-        file_chooser.response.connect ((dialog, response_id) => {
-            switch (response_id) {
-                case Gtk.ResponseType.ACCEPT:
-                    play_pause_button.image = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
-                    playing = false;
-                    player.set_uri (file_chooser.get_uri());
-                    var player_title = GLib.Path.get_basename (file_chooser.get_uri());
-                    // Remove extension, replace spaces with actual spaces
-                    // In future might read mp3 meta if need more info - i.e. time
-                    var ext_index = player_title.last_index_of_char ('.', 0);
-                    if (ext_index == -1) ext_index = player_title.length;
-                    app_window.title = player_title.substring (0, ext_index).replace ("%20", " ");
-                    break;
-                default:
-                    exit (0);
-                    break;
-            }
-
-            dialog.destroy ();
-        });
-        
-
         layout.attach (seek_backward_button, 0, 0, 1, 1);
         layout.attach (play_pause_button, 1, 0, 1, 1);  
         layout.attach (seek_forward_button, 2, 0, 1, 1);
@@ -141,7 +162,6 @@ public class PantheonAudio : Gtk.Application {
         app_window.add (layout);
 
         app_window.show_all ();
-        file_chooser.show ();
        
         app_window.destroy.connect (Gtk.main_quit);
     }
