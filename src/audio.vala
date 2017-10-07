@@ -136,6 +136,7 @@ public class PantheonAudio : Gtk.Application {
         });
 
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        seek_scale.get_style_context ().add_class ("seek-bar");
         seek_scale.set_draw_value (false);
 
         // Update the seek_scale with the current time every half second
