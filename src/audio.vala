@@ -98,6 +98,7 @@ public class PantheonAudio : Gtk.Application {
         layout.row_spacing = 6;
 
         var seek_backward_button = new Gtk.Button ();
+        seek_backward_button.sensitive = false;
         seek_backward_button.image = new Gtk.Image.from_icon_name ("media-seek-backward-symbolic", Gtk.IconSize.DIALOG);
         seek_backward_button.clicked.connect (() => {
             double current_position = player.get_position ();
@@ -121,6 +122,7 @@ public class PantheonAudio : Gtk.Application {
         });
 
         var seek_forward_button = new Gtk.Button ();
+        seek_forward_button.sensitive = false;
         seek_forward_button.image = new Gtk.Image.from_icon_name ("media-seek-forward-symbolic", Gtk.IconSize.DIALOG);
         seek_forward_button.clicked.connect (() => {
             double current_position = player.get_position ();
@@ -136,6 +138,7 @@ public class PantheonAudio : Gtk.Application {
         });
 
         var seek_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        seek_scale.sensitive = false;
         seek_scale.set_draw_value (false);
 
         // Update the seek_scale with the current time every half second
